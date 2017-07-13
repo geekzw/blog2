@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzw.mappers.UserInfoMapper">
+
+    <select id="getUserInfoByName" resultType="UserInfo" parameterType="String">
+        select * from user_info where username = #{username}
+    </select>
+
+    <insert id="insertUserInfo" parameterType="UserInfo">
+        INSERT INTO user_info(username,avatar,nickname,phone,email,signature,address,announcement,telegram,wechart) VALUES (#{username},#{avatar},#{nickname},#{phone},#{email},#{signature},#{address},#{announcement},#{telegram},#{wechart})
+    </insert>
+
+    <update id="updateUserInfo" parameterType="UserInfo">
+        update user_info set
+        <if test="nickName!=null">
+            avatar=#{avatar}
+        </if>
+        <if test="nickname!=null">
+            nickname=#{nickname}
+        </if>
+        <if test="phone!=null">
+            phone=#{phone}
+        </if>
+        <if test="email!=null">
+            email=#{email}
+        </if>
+        <if test="signature!=null">
+            signature=#{signature}
+        </if>
+        <if test="address!=null">
+            address=#{address}
+        </if>
+        <if test="announcement!=null">
+            announcement=#{announcement}
+        </if>
+
+        <if test="telegram!=null">
+            telegram=#{telegram}
+        </if>
+        <if test="wechart!=null">
+            wechart=#{wechart}
+        </if>
+        where username=#{username}
+    </update>
+
+</mapper>
