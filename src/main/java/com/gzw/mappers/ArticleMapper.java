@@ -1,30 +1,30 @@
 package com.gzw.mappers;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.gzw.domain.Article;
-import com.gzw.domain.ArticleClass;
-import com.gzw.domain.ArticlePigeonhole;
-import org.springframework.stereotype.Service;
-
+import com.gzw.domain.ArticleExample;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
-/**
- * Created by gujian on 2017/6/25.
- */
-public interface ArticleMapper extends BaseMapper<Article>{
+public interface ArticleMapper {
+    long countByExample(ArticleExample example);
 
-    List<Article> findByAuthor(String author);
+    int deleteByExample(ArticleExample example);
 
-    List<Article> findByTitle(String title);
+    int deleteByPrimaryKey(Integer id);
 
-    List<Article> findByTag(String tag);
+    int insert(Article record);
 
-    int getArticleCount(String username);
+    int insertSelective(Article record);
 
-    int getTagCount(String username);
+    List<Article> selectByExample(ArticleExample example);
 
-    List<ArticleClass> getArticleClassList(String username);
+    Article selectByPrimaryKey(Integer id);
 
-    List<ArticlePigeonhole> getArticlePigeonhle(String username);
+    int updateByExampleSelective(@Param("record") Article record, @Param("example") ArticleExample example);
 
+    int updateByExample(@Param("record") Article record, @Param("example") ArticleExample example);
+
+    int updateByPrimaryKeySelective(Article record);
+
+    int updateByPrimaryKey(Article record);
 }

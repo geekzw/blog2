@@ -1,38 +1,42 @@
 package com.gzw.domain;
 
-import java.io.Serializable;
+public class UserInfo {
+    private Integer id;
 
-/**
- * Created by gujian on 2017/6/29.
- */
-public class UserInfo implements Serializable {
+    private String username;
 
-    private String username; //用户名
+    private String avatar;
 
-    private String avatar; //图像src
+    private String nickname;
 
-    private String nickname; //昵称
+    private String phone;
 
-    private String phone; //电话号码
+    private String email;
 
-    private String email; //邮箱
+    private String signature;
 
-    private String signature; //个性签名
+    private String address;
 
-    private String address; //地址
+    private String announcement;
 
-    private String announcement; //公告
+    private String telegram;
 
-    private String telegram; //tg
+    private String wechart;
 
-    private String wechart;  //微信
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username == null ? null : username.trim();
     }
 
     public String getAvatar() {
@@ -40,7 +44,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setAvatar(String avatar) {
-        this.avatar = avatar;
+        this.avatar = avatar == null ? null : avatar.trim();
     }
 
     public String getNickname() {
@@ -48,7 +52,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = nickname == null ? null : nickname.trim();
     }
 
     public String getPhone() {
@@ -56,7 +60,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone = phone == null ? null : phone.trim();
     }
 
     public String getEmail() {
@@ -64,7 +68,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email == null ? null : email.trim();
     }
 
     public String getSignature() {
@@ -72,7 +76,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setSignature(String signature) {
-        this.signature = signature;
+        this.signature = signature == null ? null : signature.trim();
     }
 
     public String getAddress() {
@@ -80,7 +84,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = address == null ? null : address.trim();
     }
 
     public String getAnnouncement() {
@@ -88,7 +92,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setAnnouncement(String announcement) {
-        this.announcement = announcement;
+        this.announcement = announcement == null ? null : announcement.trim();
     }
 
     public String getTelegram() {
@@ -96,7 +100,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setTelegram(String telegram) {
-        this.telegram = telegram;
+        this.telegram = telegram == null ? null : telegram.trim();
     }
 
     public String getWechart() {
@@ -104,22 +108,6 @@ public class UserInfo implements Serializable {
     }
 
     public void setWechart(String wechart) {
-        this.wechart = wechart;
-    }
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "username='" + username + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", signature='" + signature + '\'' +
-                ", address='" + address + '\'' +
-                ", announcement='" + announcement + '\'' +
-                ", telegram='" + telegram + '\'' +
-                ", wechart='" + wechart + '\'' +
-                '}';
+        this.wechart = wechart == null ? null : wechart.trim();
     }
 }

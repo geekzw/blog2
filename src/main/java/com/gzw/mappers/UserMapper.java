@@ -1,14 +1,31 @@
 package com.gzw.mappers;
 
 import com.gzw.domain.User;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+import com.gzw.domain.UserExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
-/**
- * Created by gujian on 2017/6/24.
- */
-public interface UserMapper extends BaseMapper<User>{
+public interface UserMapper {
+    long countByExample(UserExample example);
 
-    User findByUsername(String usernmae);
+    int deleteByExample(UserExample example);
+
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(User record);
+
+    int insertSelective(User record);
+
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 
 }

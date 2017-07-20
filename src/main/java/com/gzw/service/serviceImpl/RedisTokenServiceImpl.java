@@ -1,6 +1,7 @@
 package com.gzw.service.serviceImpl;
 
 import com.gzw.domain.Token;
+import com.gzw.service.RedisService;
 import com.gzw.service.RedisTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,14 +18,13 @@ import java.util.concurrent.TimeUnit;
 public class RedisTokenServiceImpl implements RedisTokenService{
 
     @Autowired
-    RedisTemplate redisTemplate;
+    RedisService redisService;
 
     public Token create(String username){
 
         String strToken = UUID.randomUUID().toString().replace("-","");
         Token token =  new Token(username,strToken);
-        ValueOperations<String,Object> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(username,token);
+        redisService.setObjectValue(username,token);
         return token;
 
     }
@@ -46,14 +46,13 @@ public class RedisTokenServiceImpl implements RedisTokenService{
     @Override
     public boolean checkToken(Token token) {
         if(token == null) return false;
-        ValueOperations<String,Object> valueOperations = redisTemplate.opsForValue();
-        Token tokenTemp = (Token) valueOperations.get(token.getUsername());
+        Token tokenTemp = redisService.getObjectValue(token.getUsername(),Token.class);
 
         if (tokenTemp == null || !tokenTemp.getToken().equals(token.getToken())) {
             return false;
         }
 
-        redisTemplate.boundValueOps(token.getUsername()).expire(60*60, TimeUnit.HOURS);
+        redisService.setTimeOut(token.getUsername(),60*60);
 
         return true;
 

@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(value = "/do_login")
+    @PostMapping(value = {"/do_login"})
     public String login(User user, HttpSession session){
 
         return JSON.toJSONString(userService.loginIn(user,session));

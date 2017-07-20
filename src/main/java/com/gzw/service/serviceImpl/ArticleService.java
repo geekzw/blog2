@@ -3,6 +3,7 @@ package com.gzw.service.serviceImpl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.gzw.domain.Article;
+import com.gzw.domain.ArticleExample;
 import com.gzw.domain.ResultInfo;
 import com.gzw.domain.User;
 import com.gzw.enums.ResultCode;
@@ -35,6 +36,8 @@ public class ArticleService {
 
 
     public ResultInfo getArticleByAuthor(String nickName,Integer pageSize,Integer pageStart){
+        ArticleExample articleExample = new ArticleExample();
+        articleExample.createCriteria().andAuthorEqualTo(nickName);
         List<Article> list;
         ResultInfo resultInfo;
         ValueOperations<String, List<Article>> operations = redisTemplate.opsForValue();
@@ -47,7 +50,7 @@ public class ArticleService {
         }
         PageHelper.startPage(pageStart,pageSize);
 
-        list = articleMapper.findByAuthor(nickName);
+        list = articleMapper.selectByExample(articleExample);
         if(list == null || list.size()<=0){
             resultInfo = ResultInfo.getErrorInfo(ResultCode.RESULT_EMPTY);
         }else{

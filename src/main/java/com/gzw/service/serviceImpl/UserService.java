@@ -2,18 +2,22 @@ package com.gzw.service.serviceImpl;
 
 import com.alibaba.fastjson.JSON;
 import com.gzw.domain.Token;
+import com.gzw.domain.UserExample;
+import com.gzw.domain.vo.LoginVO;
 import com.gzw.enums.ResultCode;
 import com.gzw.domain.ResultInfo;
 import com.gzw.domain.User;
 import com.gzw.mappers.UserMapper;
 import com.gzw.service.RedisTokenService;
 import com.gzw.utils.Md5Util;
+import com.gzw.utils.RsaUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by gujian on 2017/6/23.
@@ -28,7 +32,10 @@ public class UserService {
     private RedisTokenService tokenService;
 
     public User getUserByUsername(String username){
-        return userMapper.findByUsername(username);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(username);
+        List<User> list = userMapper.selectByExample(userExample);
+        return list == null?null:list.get(0);
     }
 
     /**
@@ -37,8 +44,13 @@ public class UserService {
      * @return
      */
     public ResultInfo loginIn(User user, HttpSession session){
-        ResultInfo resultInfo;
-        User user1 = userMapper.findByUsername(user.getUsername());
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(user.getUsername());
+        List<User> list = userMapper.selectByExample(userExample);
+        User user1 = list == null?null:list.get(0);
+        ResultInfo<LoginVO> resultInfo;
+        LoginVO loginVO = new LoginVO();
+
         if(user1 == null){
             resultInfo = ResultInfo.getErrorInfo(ResultCode.NO_USER);
         }else{
@@ -46,7 +58,9 @@ public class UserService {
                 session.setAttribute("user",user);
                 Token token = tokenService.create(user.getUsername());
                 String auth = token.getUsername()+"_"+token.getToken();
-                resultInfo = ResultInfo.getSuccessWithInfo(ResultCode.LOGIN_SUCCESS,auth);
+                loginVO.setToken(auth);
+                loginVO.setPublicKey(RsaUtil.getPublicKeyStrOrCreate());
+                resultInfo = ResultInfo.getSuccessWithInfo(ResultCode.LOGIN_SUCCESS,loginVO);
             }else{
                 resultInfo = ResultInfo.getErrorInfo(ResultCode.ERROR_USERNAME_OR_PASSSWORD);
             }
@@ -61,12 +75,15 @@ public class UserService {
      */
     public ResultInfo register(User user){
         ResultInfo resultInfo;
-        User user1 = userMapper.findByUsername(user.getUsername());
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(user.getUsername());
+        List<User> list = userMapper.selectByExample(userExample);
+        User user1 = list == null?null:list.get(0);
         if(user1!=null){
             resultInfo = ResultInfo.getErrorInfo(ResultCode.USER_EXIST);
         }else{
             user.setPassword(Md5Util.pwdDigest(user.getPassword()));
-            if(userMapper.insert(user)) resultInfo = ResultInfo.getSuccessInfo(ResultCode.REGISTER_SUCCESS);
+            if(userMapper.insert(user)>0) resultInfo = ResultInfo.getSuccessInfo(ResultCode.REGISTER_SUCCESS);
             resultInfo = ResultInfo.getErrorInfo(ResultCode.REGISTER_FAILE);
         }
         return resultInfo;
@@ -74,9 +91,12 @@ public class UserService {
 
     public ResultInfo<User> update(User user){
         ResultInfo<User> resultInfo;
-        if(userMapper.update(user)){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(user.getUsername());
+
+        if(userMapper.updateByExample(user,userExample)>0){
             resultInfo = ResultInfo.getSuccessInfo(ResultCode.UPDATE_SUCCESS);
-            resultInfo.setData(userMapper.findByUsername(user.getUsername()));
+            resultInfo.setData(userMapper.selectByExample(userExample).get(0));
         }else{
             resultInfo = ResultInfo.getErrorInfo(ResultCode.UPDATE_ERROR);
         }

@@ -1,9 +1,11 @@
 package com.gzw.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by gujian on 2017/7/7.
  */
-public class Token {
+public class Token implements Serializable{
 
     private String username;
     private String token;

@@ -1,56 +1,28 @@
 package com.gzw.domain;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by gujian on 2017/6/23.
- */
-public class Article implements Serializable{
+public class Article {
+    private Integer id;
 
-    private int id;
-
-    private String title;
+    private String author;
 
     private String content;
 
     private String tag;
 
-    private String author;
+    private String title;
 
     private String username;
 
-    public int getId() {
+    private Date dateCreate;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
     }
 
     public String getAuthor() {
@@ -58,7 +30,31 @@ public class Article implements Serializable{
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = author == null ? null : author.trim();
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag == null ? null : tag.trim();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
     public String getUsername() {
@@ -66,6 +62,14 @@ public class Article implements Serializable{
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username == null ? null : username.trim();
+    }
+
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
     }
 }

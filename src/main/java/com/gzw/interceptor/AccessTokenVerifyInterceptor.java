@@ -38,11 +38,11 @@ public class AccessTokenVerifyInterceptor extends HandlerInterceptorAdapter {
         LOG.info("AccessToken executing ...");
         boolean flag = false;
 
-        if (service == null) {//解决service为null无法注入问题
-            System.out.println("operatorLogService is null!!!");
-            BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
-            service = (RedisTokenServiceImpl) factory.getBean("redisTokenServiceImpl");
-        }
+//        if (service == null) {//解决service为null无法注入问题
+//            System.out.println("operatorLogService is null!!!");
+//            BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
+//            service = (RedisTokenServiceImpl) factory.getBean("redisTokenServiceImpl");
+//        }
 
         // token
         String accessToken = request.getParameter("token");
