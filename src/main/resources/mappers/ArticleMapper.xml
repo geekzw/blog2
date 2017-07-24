@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gzw.mappers.UserMapper">
-  <resultMap id="BaseResultMap" type="com.gzw.domain.User">
+<mapper namespace="com.gzw.mappers.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.gzw.domain.Article">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="date_create" jdbcType="TIMESTAMP" property="dateCreate" />
   </resultMap>
@@ -66,16 +69,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `password`, username, date_create
+    id, author, content, tag, title, username, date_create
   </sql>
-  <select id="selectByExample" parameterType="com.gzw.domain.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.gzw.domain.ArticleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from bolg_user
+    from article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,36 +89,47 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from bolg_user
+    from article
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from bolg_user
+    delete from article
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.gzw.domain.UserExample">
-    delete from bolg_user
+  <delete id="deleteByExample" parameterType="com.gzw.domain.ArticleExample">
+    delete from article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.gzw.domain.User">
+  <insert id="insert" parameterType="com.gzw.domain.Article">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bolg_user (`password`, username, date_create
+    insert into article (author, content, tag, 
+      title, username, date_create
       )
-    values (#{password,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}
+    values (#{author,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.gzw.domain.User">
+  <insert id="insertSelective" parameterType="com.gzw.domain.Article">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bolg_user
+    insert into article
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="password != null">
-        `password`,
+      <if test="author != null">
+        author,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+      <if test="title != null">
+        title,
       </if>
       <if test="username != null">
         username,
@@ -125,8 +139,17 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
@@ -136,20 +159,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.gzw.domain.UserExample" resultType="java.lang.Long">
-    select count(*) from bolg_user
+  <select id="countByExample" parameterType="com.gzw.domain.ArticleExample" resultType="java.lang.Long">
+    select count(*) from article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update bolg_user
+    update article
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.password != null">
-        `password` = #{record.password,jdbcType=VARCHAR},
+      <if test="record.author != null">
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tag != null">
+        tag = #{record.tag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
       </if>
       <if test="record.username != null">
         username = #{record.username,jdbcType=VARCHAR},
@@ -163,20 +195,32 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update bolg_user
+    update article
     set id = #{record.id,jdbcType=INTEGER},
-      `password` = #{record.password,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
+      tag = #{record.tag,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
       username = #{record.username,jdbcType=VARCHAR},
       date_create = #{record.dateCreate,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gzw.domain.User">
-    update bolg_user
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzw.domain.Article">
+    update article
     <set>
-      <if test="password != null">
-        `password` = #{password,jdbcType=VARCHAR},
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
       </if>
       <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
@@ -187,50 +231,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.gzw.domain.User">
-    update bolg_user
-    set `password` = #{password,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.gzw.domain.Article">
+    update article
+    set author = #{author,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
       username = #{username,jdbcType=VARCHAR},
       date_create = #{dateCreate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-    <select id="findById" parameterType="Integer" resultMap="userResultMap">
-        select * from bolg_user where username = #{id}
-    </select>
-
-    <delete id="delete" parameterType="Integer">
-        delete from bolg_user where id=#{id}
-    </delete>
-
-
-    <select id="findByUsername" parameterType="String" resultMap="userResultMap">
-        select * from bolg_user where username = #{username}
-    </select>
-
-    <insert id="insert" parameterType="user">
-        INSERT INTO bolg_user(username,password) VALUES (#{username},#{password})
-    </insert>
-
-    <update id="update" parameterType="user">
-        update bolg_user set
-        <if test="nickName!=null">
-          nick_name=#{nickName}
-        </if>
-        <if test="header!=null">
-            header=#{header}
-        </if>
-        <if test="location!=null">
-            location=#{location}
-        </if>
-        <if test="signature!=null">
-            signature=#{signature}
-        </if>
-        where username=#{username}
-    </update>
-    
-    <resultMap id="userResultMap" type="User">
-        <result column="nick_name" property="nickName" />
-    </resultMap>
-
 </mapper>

@@ -22,7 +22,7 @@ spring:
   redis:
     database: 0
     host: localhost
-    port: 32770
+    port: 32769
     pool:
       max-idle: 8
       max-active: 8
@@ -31,9 +31,9 @@ spring:
       max-total: 100
       block-when-exhausted: true
   mail:
-    host: smtp.163.com
-    username: geekzw@163.com
-    password: gzw403489692
+    host: smtp.qq.com
+    username: 403489692@qq.com
+    password: cddnrybuphdzcadh
     properties:
       mail:
         smtp:
@@ -45,11 +45,11 @@ spring:
 
 
 server:
-  port: 8089
-  ssl:
-    key-store: keystore.p12
-    key-store-password: 888888
-    keyStoreType: PKCS12
+  port: 8080
+#  ssl:
+#    key-store: keystore.p12
+#    key-store-password: 888888
+#    keyStoreType: PKCS12
 #  context-path: /
 
   tomcat:

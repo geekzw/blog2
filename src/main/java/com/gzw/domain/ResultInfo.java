@@ -23,6 +23,10 @@ public class ResultInfo<T> implements Serializable{
         return new ResultInfo(resultCode.getResultCode(),resultCode.getMessage());
     }
 
+    public static ResultInfo getSuccessInfo(String message){
+        return new ResultInfo(100,message);
+    }
+
     public static ResultInfo getErrorInfo(int code,String message){
         return new ResultInfo(code,message);
     }

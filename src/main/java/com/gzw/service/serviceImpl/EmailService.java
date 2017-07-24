@@ -1,8 +1,11 @@
 package com.gzw.service.serviceImpl;
 
+import com.gzw.domain.EmailModel;
 import com.gzw.domain.ResultInfo;
 import com.gzw.enums.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,23 +24,29 @@ import java.io.File;
 @Service
 public class EmailService {
 
+    @Value("${spring.mail.username}")
+    private String username;
+
+    @Autowired
+    private EmailModel model;
+
     @Autowired
     private JavaMailSender mailSender;
 
-    public ResultInfo sendSimpleEmail(){
+    public ResultInfo sendSimpleEmail() {
         ResultInfo resultInfo = null;
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom("geekzw@163.com");//发送者.
-        message.setTo("403489692@qq.com");//接收者.
-        message.setSubject("测试邮件（邮件主题）");//邮件主题.
-        message.setText("这是邮件内容");//邮件内容.
-        try{
+        message.setFrom(username);//发送者.
+        message.setTo(model.getEmailTo());//接收者.
+        message.setSubject(model.getEmailTitle());//邮件主题.
+        message.setText(model.getEmailContent());//邮件内容.
+        try {
             mailSender.send(message);//发送邮件
             resultInfo = ResultInfo.getSuccessInfo(ResultCode.RESULT_SUCCESS);
-        }catch (MailException m){
-            resultInfo = ResultInfo.getErrorInfo(0,m.getMessage());
-        }finally {
+        } catch (MailException m) {
+            resultInfo = ResultInfo.getErrorInfo(0, m.getMessage());
+        } finally {
             return resultInfo;
         }
 
@@ -48,9 +57,9 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = null;
         try {
-            helper = new MimeMessageHelper(mimeMessage,true);
-            helper.setFrom("geekzw@163.com");//发送者.
-            helper.setTo("403489692@qq.com");//接收者.
+            helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setFrom(username);//发送者.
+            helper.setTo(model.getEmailTo());//接收者.
             helper.setSubject("测试附件（邮件主题）");//邮件主题.
             helper.setText("这是邮件内容（有附件哦.）");//邮件内容.
 
@@ -61,8 +70,8 @@ public class EmailService {
             resultInfo = ResultInfo.getSuccessInfo(ResultCode.RESULT_SUCCESS);
         } catch (MessagingException e) {
             e.printStackTrace();
-            resultInfo = ResultInfo.getErrorInfo(0,e.getMessage());
-        }finally {
+            resultInfo = ResultInfo.getErrorInfo(0, e.getMessage());
+        } finally {
             return resultInfo;
         }
     }
